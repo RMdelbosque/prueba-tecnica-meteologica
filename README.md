@@ -1,59 +1,24 @@
-# PruebaTecnicaMeteologica
+# Prueba de selección para vacante de programador Frontend/Fullstack
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.17.
+## Objetivo:
+Desarrollar una aplicación web que utilice los datos del archivo YAML adjunto para visualizar datos de predicción meteorológica.
 
-## Development server
+## Requisitos:
+1. Los datos deben consumirse de forma progresiva, actualizándose cada 5 segundos en función de la hora actual.
+2. La interfaz debe reflejar los cambios en tiempo real y exhibir el último valor recibido en una sección designada.
+3. Representación gráfica con intervalos minutales.
+4. Visualización de los valores con las siguientes unidades:
+    - La temperatura media en grados Celsius.
+    - La energía producida en kWh.
 
-To start a local development server, run:
+## Se valorará:
+- Resolver el problema de la manera más eficiente, considerando el volumen de datos.
+- Entregar código claro y bien documentado.
+- Utilizar librerías o frameworks diferentes a React, en caso de optar por ellos.
+- Explicación del proceso y resultado artístico.
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Entregables:
+Debe entregarse al menos:
+- El código desarrollado.
+- Las instrucciones para lanzar la aplicación.
+- Una captura de pantalla donde se vea el navegador mostrando la interfaz web.
