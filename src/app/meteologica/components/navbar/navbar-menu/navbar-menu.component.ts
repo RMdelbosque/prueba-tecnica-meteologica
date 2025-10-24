@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
-interface MenuOptions {
-  label: string;
-  route: string;
-}
+import { MENU_OPTIONS, MenuOption } from '../../../interfaces/menu-options.interface';
 
 @Component({
   selector: 'navbar-menu',
@@ -13,18 +9,5 @@ interface MenuOptions {
 })
 export class NavbarMenuComponent {
 
-  menuOptions: MenuOptions[] = [
-    {
-      label: 'Inicio',
-      route: 'home'
-    },
-    {
-      label: 'Temperatura',
-      route: 'temperature'
-    },
-    {
-      label: 'Energía',
-      route: 'power'
-    }
-  ]
+  menuOptions: MenuOption[] = MENU_OPTIONS;
  }

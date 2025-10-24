@@ -1,1 +1,93 @@
-<p>footer.component works!</p>,
+<footer class="bg-base-footer text-white py-10 px-6 border-t border-gray-800">
+  <!-- Logo + Line -->
+  <div class="grid grid-cols-1 sm:grid-cols-6 items-center gap-4 mx-8 mb-8">
+    <div class="flex justify-center sm:justify-start">
+      <img
+        src="/assets/img/Logo_blanco.png"
+        alt="Meteologica logo invertido"
+        class="h-6 sm:h-5 opacity-90"
+      />
+    </div>
+    <div class="bg-white h-0.5 sm:h-1 sm:col-span-5 w-full"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-sm tracking-wide">
+    <!-- Emails -->
+    <div class="flex items-start gap-3">
+      <i class="fa-solid fa-envelope text-white text-lg mt-1"></i>
+      <div>
+        <b class="block mb-2 text-base text-white">Enquiries</b>
+        @for (email of contactEmails; track email.address) {
+          <a
+            href="mailto:{{ email.address }}"
+            class="block text-gray-300 hover:text-[#00cc76] transition"
+          >
+            {{ email.address }}
+          </a>
+        }
+      </div>
+    </div>
+
+    <!-- Phone + LinkedIn -->
+    <div class="space-y-5">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-mobile-screen-button text-lg"></i>
+        <p class="text-gray-300">
+          <b class="text-white">{{ phone }}</b>
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <i class="fa-brands fa-linkedin text-white text-lg"></i>
+        <a
+          [href]="linkedinUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-[#00cc76] transition font-semibold"
+        >
+          LinkedIn
+        </a>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="flex items-start gap-3">
+      <i class="fa-solid fa-location-dot text-white text-lg mt-1"></i>
+      <p class="text-gray-300">
+        <b class="block text-white">
+          <a
+            [href]="addressUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-[#00cc76] transition"
+          >
+            {{ address.street }}
+          </a>
+        </b>
+        {{ address.city }}<br />
+        {{ address.country }}
+      </p>
+    </div>
+
+    <!-- Legal notice -->
+    <div>
+      <p class="text-gray-300">
+        <b class="block text-white">
+          <a
+            [href]="legalUrl"
+            target="_blank"
+            class="hover:text-[#00cc76] transition"
+          >
+            Legal notice
+          </a>
+        </b>
+      </p>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="text-center mt-8 text-sm text-gray-400">
+    © {{ currentYear }} Meteologica S.A.
+  </div>
+</footer>

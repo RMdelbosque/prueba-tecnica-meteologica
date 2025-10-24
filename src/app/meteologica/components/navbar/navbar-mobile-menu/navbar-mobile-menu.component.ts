@@ -1,10 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
-interface MenuOptions {
-  label: string;
-  route: string;
-}
+import { MENU_OPTIONS, MenuOption } from '../../../interfaces/menu-options.interface';
 
 @Component({
   selector: 'navbar-mobile-menu',
@@ -14,18 +10,5 @@ interface MenuOptions {
 export class NavbarMobileMenuComponent {
   @Output() closeMenu = new EventEmitter<void>();
 
-  menuOptions: MenuOptions[] = [
-    {
-      label: 'Inicio',
-      route: 'home'
-    },
-    {
-      label: 'Temperatura',
-      route: 'temperature'
-    },
-    {
-      label: 'Energía',
-      route: 'power'
-    }
-  ]
+  menuOptions: MenuOption[] = MENU_OPTIONS;
  }

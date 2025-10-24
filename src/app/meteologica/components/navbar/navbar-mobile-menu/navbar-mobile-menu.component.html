@@ -1,16 +1,12 @@
  <div class="bg-white border-t border-gray-200 shadow-inner">
       <ul class="flex flex-col items-center gap-4 py-4 text-lg">
-        @for (link of [
-          { path: '/home', label: 'Inicio' },
-          { path: '/temperature', label: 'Temperatura' },
-          { path: '/power', label: 'Energía' }
-        ]; track link.path) {
+        @for (link of menuOptions; track link.route) {
           <li>
             <a
-              routerLink="{{ link.path }}"
+              routerLink="{{ link.route }}"
               routerLinkActive
               #rlaM="routerLinkActive"
-              (click)="closeMenu.emit()"
+              (click)="closeMenu.emit()" 
               [class]="
                 rlaM.isActive
                   ? 'text-black border-b-2 border-[#00cc76]'
