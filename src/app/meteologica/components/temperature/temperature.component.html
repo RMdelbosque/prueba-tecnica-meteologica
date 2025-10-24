@@ -1,1 +1,13 @@
-<p>temperature.component works!</p>,
+<div class="text-center">
+      <h2 class="text-xl font-semibold mb-2">🌡️ Temperatura actual</h2>
+      <p class="text-3xl font-bold text-blue-600">
+        {{ temperature.currentTemperatureC()?.toFixed(2) ?? '—' }} °C
+      </p>
+
+      <h3 class="mt-6 text-lg font-medium">Media por hora</h3>
+      <ul>
+        @for (avg of temperature.hourlyAverages(); track avg.hour) {
+          <li>{{ avg.hour }}:00 — {{ avg.value.toFixed(2) }} °C</li>
+        }
+      </ul>
+    </div>
