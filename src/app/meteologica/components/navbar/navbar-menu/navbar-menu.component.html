@@ -1,0 +1,17 @@
+<div class="hidden md:flex items-center gap-8 text-xl">
+      @for (link of menuOptions; track link.route) {
+        <a
+          routerLink="{{ link.route }}"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [class]="
+            rla.isActive
+              ? 'text-black border-b-2 border-[#00cc76]'
+              : 'text-black hover:text-[#00cc76] border-b-2 border-transparent'
+          "
+          class="transition font-medium pb-1"
+        >
+          {{ link.label }}
+        </a>
+      }
+    </div>

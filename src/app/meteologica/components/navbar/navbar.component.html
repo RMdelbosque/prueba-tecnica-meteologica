@@ -1,1 +1,31 @@
-<p>navbar.component works!</p>,
+<nav class="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+
+    <!-- Logo -->
+    <div class="flex items-center gap-2">
+      <a routerLink="/home" class="flex items-center gap-2">
+        <img src="/assets/img/Logo_negro.png" alt="Meteologica logo" class="h-5" />
+
+      </a>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <navbar-menu/>
+
+    <!-- Mobile Menu Button -->
+    <button
+      (click)="toggleMenu()"
+      class="md:hidden flex flex-col justify-center items-center w-10 h-10 border border-gray-400 rounded-lg"
+    >
+      <span class="block w-6 h-0.5 bg-black mb-1"></span>
+      <span class="block w-6 h-0.5 bg-black mb-1"></span>
+      <span class="block w-6 h-0.5 bg-black"></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (menuOpen()) {
+    <navbar-mobile-menu (closeMenu)="closeMenu()" class="md:hidden"/>
+  }
+</nav>
+
