@@ -45,31 +45,55 @@ export function computeHourlyAverages(
     }));
 }
 
-// Computes averages grouped by minute (e.g. 00:00, 00:01, 00:02...)
+
 export function computeMinuteAverages(
   entries: { time: string; value: number }[]
 ): { minute: string; value: number }[] {
   const grouped: Record<string, number[]> = {};
 
   for (const { time, value } of entries) {
-    // Take the first 5 chars: "HH:mm"
-    const minuteKey = time.slice(0, 5);
-    if (!grouped[minuteKey]) grouped[minuteKey] = [];
-    grouped[minuteKey].push(value);
+    const minute = time.slice(0, 5); // HH:mm
+    if (!grouped[minute]) grouped[minute] = [];
+    grouped[minute].push(value);
   }
 
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
+  // Calcular medias
+  const averages = Object.entries(grouped).map(([minute, values]) => ({
+    minute,
+    value: values.reduce((sum, v) => sum + v, 0) / values.length || 0,
+  }));
 
-  return Object.entries(grouped)
-    .filter(([key]) => {
-      const [h, m] = key.split(':').map(Number);
-      // Only include minutes up to the current one
-      return h < currentHour || (h === currentHour && m <= currentMinute);
-    })
-    .map(([minute, values]) => ({
-      minute,
-      value: values.reduce((sum, v) => sum + v, 0) / values.length || 0,
-    }));
+  // 🔹 Ordenar por minuto
+  averages.sort((a, b) => (a.minute > b.minute ? 1 : -1));
+
+  // 🔹 Rellenar minutos faltantes con el último valor conocido
+  const filled: { minute: string; value: number }[] = [];
+  let lastValue = averages[0]?.value ?? 0;
+
+  const firstTime = averages[0]?.minute;
+  const lastTime = averages[averages.length - 1]?.minute;
+  if (!firstTime || !lastTime) return [];
+
+  const [startH, startM] = firstTime.split(':').map(Number);
+  const [endH, endM] = lastTime.split(':').map(Number);
+  const totalMinutes = (endH - startH) * 60 + (endM - startM);
+
+  for (let i = 0; i <= totalMinutes; i++) {
+    const currentDate = new Date();
+    currentDate.setHours(startH);
+    currentDate.setMinutes(startM + i);
+    const mm = String(currentDate.getMinutes()).padStart(2, '0');
+    const hh = String(currentDate.getHours()).padStart(2, '0');
+    const key = `${hh}:${mm}`;
+
+    const found = averages.find(a => a.minute === key);
+    if (found) {
+      lastValue = found.value;
+      filled.push(found);
+    } else {
+      filled.push({ minute: key, value: lastValue });
+    }
+  }
+
+  return filled;
 }

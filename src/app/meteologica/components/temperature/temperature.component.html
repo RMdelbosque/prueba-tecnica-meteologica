@@ -4,10 +4,13 @@
         {{ temperature.currentTemperatureC()?.toFixed(2) ?? '—' }} °C
       </p>
 
-      <h3 class="mt-6 text-lg font-medium">Media por hora</h3>
+      <!-- <h3 class="mt-6 text-lg font-medium">Media por hora</h3>
       <ul>
         @for (avg of temperature.minuteAverages(); track avg.minute) {
           <li>{{ avg.minute }}:00 — {{ avg.value.toFixed(2) }} °C</li>
         }
-      </ul>
+      </ul> -->
+      <temperature-chart/>
     </div>
+
+
