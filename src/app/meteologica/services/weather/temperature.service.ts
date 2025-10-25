@@ -1,34 +1,40 @@
 import { Injectable, inject, signal, effect } from '@angular/core';
 import { WeatherService } from './weather.service';
 import { ClockService } from '../clock.service';
-import { mapTemperatureData, TemperatureRecord } from '../../mapper/temperature.mapper';
-import { getValueAtCurrentTime, computeHourlyAverages } from '../../utils/time.utils';
+import { mapTemperatureData, mapTemperatureForCalculations, TemperatureRecord } from '../../mapper/temperature.mapper';
+import { getValueAtCurrentTime, computeHourlyAverages, computeMinuteAverages } from '../../utils/time.utils';
 
 @Injectable({ providedIn: 'root' })
 export class TemperatureService {
-  private weather = inject(WeatherService);
-  private clock = inject(ClockService);
+  private weather = inject(WeatherService); // Data source
+  private clock = inject(ClockService); // Current time
 
-  currentTemperatureC = signal<number | null>(null);
-  hourlyAverages = signal<{ hour: string; value: number }[]>([]);
+  currentTemperatureC = signal<number | null>(null); // Current temperature in °C
+  minuteAverages = signal<{ minute: string; value: number }[]>([]); // Average temperature per minutes
 
   constructor() {
     effect(() => {
-      const data = this.weather.data();
-      const time = this.clock.currentTime();
+      // temperature YAML dataset
+      const data = this.weather.temperatureData();
+      const time = this.clock.currentTime(); // triggers updates each second
 
-      const temps: TemperatureRecord[] = mapTemperatureData(data);
-      if (!temps.length) return;
+      if (!data?.values) return;
 
-      const current = getValueAtCurrentTime(
-        temps.map(t => ({ time: t.time, value: t.celsius }))
-      );
-      if (current !== null) this.currentTemperatureC.set(current);
+      // Convert dK to °C
+      const temperatures = mapTemperatureData({temperature: {values: data}} as any);
 
-      this.hourlyAverages.set(
-        computeHourlyAverages(
-          temps.map(t => ({ time: t.time, value: t.celsius }))
-        )
+      if (!temperatures.length) return;
+
+      // Prepare entries for calculation utils
+      // const entries = mapTemperatureForCalculations(temperatures);
+
+      //  Update current temperature based on the current time
+      const currentTemperature = getValueAtCurrentTime(mapTemperatureForCalculations(temperatures));
+      if (currentTemperature !== null) this.currentTemperatureC.set(currentTemperature);
+
+      // Update hourly averages
+      this.minuteAverages.set(
+        computeMinuteAverages(mapTemperatureForCalculations(temperatures))
       );
     });
   }

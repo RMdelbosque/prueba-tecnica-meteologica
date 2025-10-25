@@ -5,7 +5,10 @@ import { WeatherData } from '../../interfaces/weather-data-interace';
 @Injectable({ providedIn: 'root' })
 export class WeatherService {
   // Signal to save data
-  data = signal<WeatherData | null>(null);
+  private data = signal<WeatherData | null>(null);
+
+  temperatureData = signal<{time: string; value: number}[]>([]);
+  powerData = signal<{time: string; value: number}[]>([]);
 
   constructor() {
     this.loadData();
@@ -24,14 +27,16 @@ export class WeatherService {
 
       // Ensure that temperature and power exist.
       if (!parsed?.temperature?.values || !parsed?.power?.values)
-        throw new Error('YAML sin secciones válidas');
+        throw new Error('Invalid YAML sections');
 
-      // Save the parsed data
+      // Save the parsed datas
       this.data.set(parsed);
+      this.temperatureData.set(parsed.temperature.values);
+      this.powerData.set(parsed.power.values);
 
-      console.log('✅ YAML cargado');
+      console.log('Weather data loaded');
     } catch (err) {
-      console.error('❌ Error cargando YAML:', err);
+      console.error('Error loading YAML:', err);
     }
   }
 }

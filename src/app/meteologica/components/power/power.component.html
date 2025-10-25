@@ -1,1 +1,13 @@
-<p>power.component works!</p>,
+<div class="text-center">
+      <h2 class="text-xl font-semibold mb-2">⚡ Energia actual</h2>
+      <p class="text-3xl font-bold text-blue-600">
+        {{ power.currentPowerKWh()?.toFixed(2) ?? '—' }} kWh
+      </p>
+
+      <h3 class="mt-6 text-lg font-medium">Media por minuto</h3>
+      <ul>
+        @for (avg of power.minuteAverages(); track avg.minute) {
+          <li>{{ avg.minute }}:00 — {{ avg.value.toFixed(2) }} kWh</li>
+        }
+      </ul>
+    </div>

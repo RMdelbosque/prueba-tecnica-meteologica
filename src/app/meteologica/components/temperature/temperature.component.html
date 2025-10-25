@@ -6,8 +6,8 @@
 
       <h3 class="mt-6 text-lg font-medium">Media por hora</h3>
       <ul>
-        @for (avg of temperature.hourlyAverages(); track avg.hour) {
-          <li>{{ avg.hour }}:00 — {{ avg.value.toFixed(2) }} °C</li>
+        @for (avg of temperature.minuteAverages(); track avg.minute) {
+          <li>{{ avg.minute }}:00 — {{ avg.value.toFixed(2) }} °C</li>
         }
       </ul>
     </div>
