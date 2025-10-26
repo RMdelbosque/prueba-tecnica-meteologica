@@ -121,14 +121,13 @@ export class PowerChartComponent implements OnInit, OnDestroy {
       .attr('class', 'grid')
       .call(
         d3.axisLeft(y)
-          .ticks(6)
+          .ticks(4)
           .tickSize(-innerWidth)
           .tickFormat(() => '')
       )
-      .selectAll('line')
       .attr('stroke', '#d1d5db')
-      .attr('stroke-opacity', 0.4)
-      .attr('stroke-dasharray', '3,3');
+      .attr('stroke-opacity', 0.1)
+      .attr('stroke-dasharray', '4,4');
 
     // Eje X
     this.chartGroup
@@ -136,7 +135,7 @@ export class PowerChartComponent implements OnInit, OnDestroy {
       .attr('transform', `translate(0,${innerHeight})`)
       .call(
         d3.axisBottom(x)
-          .tickValues(x.domain().filter((_, i) => i % 30 === 0)) // cada 30 min
+          .tickValues(x.domain().filter((_, i) => i % 60 === 0)) // cada 30 min
       )
       .selectAll('text')
       .attr('transform', 'rotate(-45)')

@@ -49,49 +49,49 @@ export function computeHourlyAverages(
 export function computeMinuteAverages(
   entries: { time: string; value: number }[]
 ): { minute: string; value: number }[] {
-  const grouped: Record<string, number[]> = {};
+  if (!entries?.length) return [];
 
+  // Group entries by minute (HH:mm), ignoring NaN or invalid values
+  const grouped: Record<string, number[]> = {};
   for (const { time, value } of entries) {
-    const minute = time.slice(0, 5); // HH:mm
+    if (isNaN(value) || value === null) continue;
+    const minute = time.slice(0, 5);
     if (!grouped[minute]) grouped[minute] = [];
     grouped[minute].push(value);
   }
 
-  // Calcular medias
+  // Compute averages for each minute
   const averages = Object.entries(grouped).map(([minute, values]) => ({
     minute,
     value: values.reduce((sum, v) => sum + v, 0) / values.length || 0,
   }));
 
-  // 🔹 Ordenar por minuto
+  // Sort by time
   averages.sort((a, b) => (a.minute > b.minute ? 1 : -1));
 
-  // 🔹 Rellenar minutos faltantes con el último valor conocido
+  // Fill missing minutes from 00:00 to current time
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+
   const filled: { minute: string; value: number }[] = [];
   let lastValue = averages[0]?.value ?? 0;
 
-  const firstTime = averages[0]?.minute;
-  const lastTime = averages[averages.length - 1]?.minute;
-  if (!firstTime || !lastTime) return [];
+  for (let h = 0; h <= currentHour; h++) {
+    const maxMinute = h === currentHour ? currentMinute : 59;
+    for (let m = 0; m <= maxMinute; m++) {
+      const hh = String(h).padStart(2, '0');
+      const mm = String(m).padStart(2, '0');
+      const key = `${hh}:${mm}`;
 
-  const [startH, startM] = firstTime.split(':').map(Number);
-  const [endH, endM] = lastTime.split(':').map(Number);
-  const totalMinutes = (endH - startH) * 60 + (endM - startM);
-
-  for (let i = 0; i <= totalMinutes; i++) {
-    const currentDate = new Date();
-    currentDate.setHours(startH);
-    currentDate.setMinutes(startM + i);
-    const mm = String(currentDate.getMinutes()).padStart(2, '0');
-    const hh = String(currentDate.getHours()).padStart(2, '0');
-    const key = `${hh}:${mm}`;
-
-    const found = averages.find(a => a.minute === key);
-    if (found) {
-      lastValue = found.value;
-      filled.push(found);
-    } else {
-      filled.push({ minute: key, value: lastValue });
+      // If data exists for this minute, use it; otherwise keep last known
+      const found = averages.find((a) => a.minute === key);
+      if (found && !isNaN(found.value)) {
+        lastValue = found.value;
+        filled.push(found);
+      } else {
+        filled.push({ minute: key, value: lastValue });
+      }
     }
   }
 

@@ -3,12 +3,5 @@
       <p class="text-3xl font-bold text-blue-600">
         {{ power.currentPowerKWh()?.toFixed(2) ?? '—' }} kWh
       </p>
-
-      <!-- <h3 class="mt-6 text-lg font-medium">Media por minuto</h3>
-      <ul>
-        @for (avg of power.minuteAverages(); track avg.minute) {
-          <li>{{ avg.minute }}:00 — {{ avg.value.toFixed(2) }} kWh</li>
-        }
-      </ul> -->
-      <power-chart/>
+      <line-chart [data]="power.minuteAverages()" color="#2d6cdf" unit="kWh" [width]="700" [height]="300"/>
     </div>

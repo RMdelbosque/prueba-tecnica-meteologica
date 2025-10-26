@@ -17,7 +17,7 @@ interface MinuteAverage {
 
 @Component({
   selector: 'temperature-chart',
-  standalone: true,
+  imports: [],
   templateUrl: './temperature-chart.component.html',
 })
 export class TemperatureChartComponent implements OnInit, OnDestroy {
@@ -33,7 +33,6 @@ export class TemperatureChartComponent implements OnInit, OnDestroy {
   private margin = { top: 30, right: 20, bottom: 40, left: 60 };
 
   constructor() {
-    // Redibuja cada vez que cambian los datos
     effect(() => {
       const data = this.temperatureService.minuteAverages();
       if (data.length) this.updateChart(data);
@@ -51,21 +50,18 @@ export class TemperatureChartComponent implements OnInit, OnDestroy {
   private initChart(): void {
     const containerEl = this.chartContainer.nativeElement as HTMLElement;
 
-    // SVG raíz con fondo claro
     this.rootSvg = d3
       .select<HTMLElement, unknown>(containerEl)
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('viewBox', `0 0 ${this.width} ${this.height}`)
-      .style('background', '#f9fafb') // fondo gris claro
+      .style('background', '#f9fafb')
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .style('width', '100%')
       .style('height', 'auto');
 
-    // Definición de gradiente para la línea y el área
     const defs = this.rootSvg.append('defs');
-
     const gradient = defs.append('linearGradient')
       .attr('id', 'lineGradient')
       .attr('x1', '0%')
@@ -83,14 +79,23 @@ export class TemperatureChartComponent implements OnInit, OnDestroy {
       .attr('stop-color', '#00cc76')
       .attr('stop-opacity', 0.1);
 
-    // Grupo principal
     this.chartGroup = this.rootSvg
       .append('g')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
   }
 
   private updateChart(data: MinuteAverage[]): void {
-    const normalizedData = data.map(d => ({
+    // 🔹 Filtrar los datos solo hasta la hora actual
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes(); // minutos desde medianoche
+
+    const filteredData = data.filter(d => {
+      const [h, m] = d.minute.split(':').map(Number);
+      const minuteOfDay = h * 60 + m;
+      return minuteOfDay <= currentTime; // solo hasta ahora
+    });
+
+    const normalizedData = filteredData.map(d => ({
       minute: d.minute.slice(0, 5),
       value: d.value,
     }));
@@ -99,10 +104,9 @@ export class TemperatureChartComponent implements OnInit, OnDestroy {
     const innerHeight = this.height - this.margin.top - this.margin.bottom;
 
     const x = d3
-      .scaleBand<string>()
-      .domain(normalizedData.map(d => d.minute))
-      .range([0, innerWidth])
-      .padding(0.1);
+      .scaleLinear()
+      .domain([0, normalizedData.length - 1])
+      .range([0, innerWidth]);
 
     const minVal = d3.min(normalizedData, d => d.value) ?? 0;
     const maxVal = d3.max(normalizedData, d => d.value) ?? 0;
@@ -112,39 +116,42 @@ export class TemperatureChartComponent implements OnInit, OnDestroy {
       .domain([minVal - 1, maxVal + 1])
       .range([innerHeight, 0]);
 
-    // Limpiar contenido anterior
     this.chartGroup.selectAll('*').remove();
 
-    // Rejilla horizontal punteada
+    // Rejilla
     this.chartGroup
       .append('g')
-      .attr('class', 'grid')
       .call(
         d3.axisLeft(y)
-          .ticks(6)
+          .ticks(4)
           .tickSize(-innerWidth)
           .tickFormat(() => '')
       )
-      .selectAll('line')
       .attr('stroke', '#d1d5db')
-      .attr('stroke-opacity', 0.4)
+      .attr('stroke-opacity', 0.2)
       .attr('stroke-dasharray', '3,3');
 
-    // Eje X
+    // Ejes
+    const xAxis = d3.axisBottom(
+      d3.scalePoint(normalizedData.map((d, i) => i.toString()), [0, innerWidth])
+    )
+      .tickValues(
+        normalizedData
+          .map((_, i) => (i % 60 === 0 ? i.toString() : null))
+          .filter((v): v is string => v !== null)
+      )
+      .tickFormat(i => normalizedData[+i].minute);
+
     this.chartGroup
       .append('g')
       .attr('transform', `translate(0,${innerHeight})`)
-      .call(
-        d3.axisBottom(x)
-          .tickValues(x.domain().filter((_, i) => i % 30 === 0)) // cada 30 min
-      )
+      .call(xAxis)
       .selectAll('text')
       .attr('transform', 'rotate(-45)')
       .style('text-anchor', 'end')
       .style('font-size', '10px')
       .style('fill', '#374151');
 
-    // Eje Y
     this.chartGroup
       .append('g')
       .call(d3.axisLeft(y).ticks(6))
@@ -152,9 +159,9 @@ export class TemperatureChartComponent implements OnInit, OnDestroy {
       .style('font-size', '10px')
       .style('fill', '#374151');
 
-    // Área bajo la línea
+    // Área
     const areaGen = d3.area<MinuteAverage>()
-      .x(d => x(d.minute)! + x.bandwidth() / 2)
+      .x((_, i) => x(i))
       .y0(innerHeight)
       .y1(d => y(d.value))
       .curve(d3.curveCatmullRom.alpha(0.5));
@@ -163,12 +170,12 @@ export class TemperatureChartComponent implements OnInit, OnDestroy {
       .append('path')
       .datum(normalizedData)
       .attr('fill', 'url(#lineGradient)')
-      .attr('opacity', 0.3)
+      .attr('opacity', 0.25)
       .attr('d', areaGen);
 
     // Línea principal
     const lineGen = d3.line<MinuteAverage>()
-      .x(d => x(d.minute)! + x.bandwidth() / 2)
+      .x((_, i) => x(i))
       .y(d => y(d.value))
       .curve(d3.curveCatmullRom.alpha(0.5));
 
@@ -178,19 +185,112 @@ export class TemperatureChartComponent implements OnInit, OnDestroy {
       .attr('fill', 'none')
       .attr('stroke', 'url(#lineGradient)')
       .attr('stroke-width', 2)
-      .style('filter', 'drop-shadow(0px 2px 3px rgba(0,0,0,0.15))')
       .attr('stroke-linejoin', 'round')
       .attr('stroke-linecap', 'round')
-      .attr('d', lineGen);
+      .attr('d', lineGen)
+      .style('pointer-events', 'none');
 
-    // Animación de dibujo
     const totalLength = (path.node() as SVGPathElement).getTotalLength();
     path
-      .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+      .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
       .attr('stroke-dashoffset', totalLength)
       .transition()
       .duration(1500)
       .ease(d3.easeCubicOut)
       .attr('stroke-dashoffset', 0);
+
+    // Tooltip (más grande y bonito)
+    d3.select(this.chartContainer.nativeElement).selectAll('div').remove();
+
+    const tooltip = d3.select(this.chartContainer.nativeElement)
+      .append('div')
+      .style('position', 'absolute')
+      .style('background', 'white')
+      .style('border', '1px solid #ddd')
+      .style('padding', '10px 14px')
+      .style('border-radius', '8px')
+      .style('font-size', '14px')
+      .style('font-weight', '500')
+      .style('pointer-events', 'none')
+      .style('color', '#111')
+      .style('box-shadow', '0 4px 10px rgba(0,0,0,0.15)')
+      .style('display', 'none');
+
+    // Overlay invisible
+    const overlay = this.chartGroup
+      .append('rect')
+      .attr('width', innerWidth)
+      .attr('height', innerHeight)
+      .attr('fill', 'transparent')
+      .style('cursor', 'crosshair');
+
+    const hoverLine = this.chartGroup
+      .append('line')
+      .attr('stroke', '#00cc76')
+      .attr('stroke-width', 1)
+      .attr('y1', 0)
+      .attr('y2', innerHeight)
+      .style('display', 'none');
+
+    const focusCircle = this.chartGroup
+      .append('circle')
+      .attr('r', 5)
+      .attr('fill', '#00cc76')
+      .attr('stroke', 'white')
+      .attr('stroke-width', 2)
+      .style('display', 'none');
+
+    // --- Interactividad mejorada ---
+    let lastSelected: number | null = null;
+
+    overlay.on('mousemove', (event) => {
+      const [mx] = d3.pointer(event);
+      const x0 = x.invert(mx);
+      const i = Math.max(0, Math.min(Math.round(x0), normalizedData.length - 1));
+      lastSelected = i;
+
+      const d = normalizedData[i];
+      const cx = x(i);
+      const cy = y(d.value);
+
+      hoverLine
+        .style('display', 'block')
+        .attr('x1', cx)
+        .attr('x2', cx);
+
+      focusCircle
+        .style('display', 'block')
+        .attr('cx', cx)
+        .attr('cy', cy);
+
+      tooltip
+        .style('display', 'block')
+        .style('left', `${event.offsetX + 20}px`)
+        .style('top', `${event.offsetY - 35}px`)
+        .html(`<strong>${d.minute}</strong><br>${d.value.toFixed(2)} °C`);
+    });
+
+    // 🧠 NO ocultamos en mouseleave → mantiene la selección
+    this.rootSvg.on('mouseleave', () => {
+      if (lastSelected !== null) {
+        // Mantiene el último valor visible sin parpadear
+        const d = normalizedData[lastSelected];
+        const cx = x(lastSelected);
+        const cy = y(d.value);
+        hoverLine
+          .style('display', 'block')
+          .attr('x1', cx)
+          .attr('x2', cx);
+        focusCircle
+          .style('display', 'block')
+          .attr('cx', cx)
+          .attr('cy', cy);
+        tooltip
+          .style('display', 'block')
+          .style('left', `${cx + this.margin.left + 25}px`)
+          .style('top', `${cy + this.margin.top - 35}px`)
+          .html(`<strong>${d.minute}</strong><br>${d.value.toFixed(2)} °C`);
+      }
+    });
   }
 }

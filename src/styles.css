@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+.chart-tooltip {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
 
 @theme {
   --color-base-footer: #002129;

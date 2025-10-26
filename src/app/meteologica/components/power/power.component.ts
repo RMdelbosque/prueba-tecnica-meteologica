@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { PowerService } from '../../services/weather/power.service';
-import { PowerChartComponent } from "./power-chart/power-chart.component";
+import { LineChartComponent } from "../line-chart/line-chart.component";
 
 @Component({
   selector: 'power',
-  imports: [PowerChartComponent],
+  imports: [LineChartComponent],
   templateUrl: './power.component.html',
 })
 export class PowerComponent {
