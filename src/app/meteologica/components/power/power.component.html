@@ -1,7 +1,19 @@
-<div class="text-center">
-      <h2 class="text-xl font-semibold mb-2">⚡ Energia actual</h2>
-      <p class="text-3xl font-bold text-blue-600">
-        {{ power.currentPowerKWh()?.toFixed(2) ?? '—' }} kWh
-      </p>
-      <line-chart [data]="power.minuteAverages()" color="#2d6cdf" unit="kWh" [width]="700" [height]="300"/>
-    </div>
+
+<div class="flex items-center gap-8 p-6">
+  <div class="flex flex-col items-center w-1/4 text-center">
+    <h2 class="text-xl font-semibold mb-2">⚡ Energia actual</h2>
+    <p class="text-3xl font-bold text-power">
+      {{ power.currentPowerKWh()?.toFixed(2) ?? '—' }} kWh
+    </p>
+  </div>
+
+  <div class="w-3/4">
+    <line-chart
+      [data]="power.minuteAverages()"
+      color="#7C3AED"
+      unit="kWh"
+      [width]="700"
+      [height]="300"
+    />
+  </div>
+</div>

@@ -17,7 +17,7 @@ export interface ChartPoint {
 
 @Component({
   selector: 'line-chart',
-  standalone: true,
+  imports: [],
   templateUrl: './line-chart.component.html',
 })
 export class LineChartComponent implements OnInit, OnDestroy, OnChanges {
@@ -63,7 +63,7 @@ export class LineChartComponent implements OnInit, OnDestroy, OnChanges {
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('viewBox', `0 0 ${this.width} ${this.height}`)
-      .style('background', '#f9fafb')
+
       .style('width', '100%')
       .style('height', 'auto');
 
@@ -134,10 +134,15 @@ export class LineChartComponent implements OnInit, OnDestroy, OnChanges {
     // Clear any previous elements before redrawing
     this.chartGroup.selectAll('*').remove();
 
-    // Grid lines
+    // Grid lines (without text)
     this.chartGroup
       .append('g')
-      .call(d3.axisLeft(y).ticks(4).tickSize(-innerWidth).tickFormat(() => ''))
+      .call(
+        d3.axisLeft(y)
+          .ticks(4)
+          .tickSize(-innerWidth)
+          .tickFormat(() => '') // no text for grid
+      )
       .attr('stroke', '#d1d5db')
       .attr('stroke-opacity', 0.2)
       .attr('stroke-dasharray', '3,3');
@@ -157,6 +162,7 @@ export class LineChartComponent implements OnInit, OnDestroy, OnChanges {
       )
       .tickFormat((i) => normalizedData[+i].minute);
 
+    // X axis
     this.chartGroup
       .append('g')
       .attr('transform', `translate(0,${innerHeight})`)
@@ -167,10 +173,14 @@ export class LineChartComponent implements OnInit, OnDestroy, OnChanges {
       .style('font-size', '10px')
       .style('fill', '#374151');
 
-    // Y axis
+    // Y axis with unit labels
     this.chartGroup
       .append('g')
-      .call(d3.axisLeft(y).ticks(6))
+      .call(
+        d3.axisLeft(y)
+          .ticks(6)
+          .tickFormat((d) => `${d} ${this.unit}`) // add unit only here
+      )
       .selectAll('text')
       .style('font-size', '10px')
       .style('fill', '#374151');
@@ -203,7 +213,7 @@ export class LineChartComponent implements OnInit, OnDestroy, OnChanges {
       .datum(normalizedData)
       .attr('fill', 'none')
       .attr('stroke', `url(#${gradientId})`)
-      .attr('stroke-width', 2)
+      .attr('stroke-width', 1.5)
       .attr('stroke-linejoin', 'round')
       .attr('stroke-linecap', 'round')
       .attr('d', lineGen)
