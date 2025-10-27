@@ -6,11 +6,11 @@
               routerLink="{{ link.route }}"
               routerLinkActive
               #rlaM="routerLinkActive"
-              (click)="closeMenu.emit()" 
+              (click)="closeMenu.emit()"
               [class]="
                 rlaM.isActive
-                  ? 'text-black border-b-2 border-[#00cc76]'
-                  : 'text-black hover:text-[#00cc76] border-b-2 border-transparent'
+                  ? 'text-black border-b-2 border-temperature'
+                  : 'text-black hover:text-temperature border-b-2 border-transparent'
               "
               class="transition font-medium pb-1"
             >

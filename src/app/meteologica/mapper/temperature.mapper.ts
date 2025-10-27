@@ -1,4 +1,5 @@
 import { WeatherData } from '../interfaces/weather-data-interace';
+import { parseNumberEU } from '../utils/time.utils';
 
 export interface TemperatureRecord {
   time: string;
@@ -9,10 +10,23 @@ export interface TemperatureRecord {
 export function mapTemperatureData(data: WeatherData | null): TemperatureRecord[] {
   if (!data?.temperature?.values) return [];
 
-  return data.temperature.values.map(v => ({
-    time: v.time,
-    celsius: Number(v.value) * 0.1 - 273.15, // dK to °C
-  }));
+  let lastValid = 0;
+
+  return data.temperature.values.map(v => {
+    // Convert string (possibly "273,15" or "273.15") to number
+    const raw = parseNumberEU(v.value);
+
+    // Convert from deci-Kelvin (dK) to °C
+    const celsius = raw * 0.1 - 273.15;
+
+    // If the value is valid, keep it; otherwise reuse last valid one
+    if (!isNaN(celsius) && celsius !== null) lastValid = celsius;
+
+    return {
+      time: v.time,
+      celsius: !isNaN(celsius) ? celsius : lastValid,
+    };
+  });
 }
 
 // Maps temperature records into a generic structure `{ time, value }`

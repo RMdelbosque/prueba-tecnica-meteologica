@@ -1,4 +1,5 @@
 import { WeatherData } from '../interfaces/weather-data-interace';
+import { parseNumberEU } from '../utils/time.utils';
 
 export interface PowerRecord {
   time: string;
@@ -12,11 +13,18 @@ export function mapPowerData(data: WeatherData | null): PowerRecord[] {
   const SECONDS_INTERVAL = 5;
   const SECONDS_PER_HOUR = 3600;
 
-  return data.power.values.map(v => ({
-    time: v.time,
-    // Convert MW to kWh (energy produced in 5 s)
-    kWh: Number(v.value) * 1000 * (SECONDS_INTERVAL / SECONDS_PER_HOUR),
-  }));
+  let lastValid = 0;
+
+  return data.power.values.map(v => {
+    const raw = parseNumberEU(v.value);
+    const kWh = raw * 1000 * (SECONDS_INTERVAL / SECONDS_PER_HOUR);
+
+    if (!isNaN(kWh) && kWh !== null) lastValid = kWh;
+
+    return { time: v.time, kWh: !isNaN(kWh) ? kWh : lastValid };
+  });
+
+
 }
 
 // Simplifies structure for utils (e.g. getValueAtCurrentTime, averages)

@@ -10,4 +10,4 @@ import { MENU_OPTIONS, MenuOption } from '../../../interfaces/menu-options.inter
 export class NavbarMenuComponent {
 
   menuOptions: MenuOption[] = MENU_OPTIONS;
- }
+}

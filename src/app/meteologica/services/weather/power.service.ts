@@ -22,13 +22,15 @@ export class PowerService {
       if (!data?.values) return;
 
       // Convert MW → kWh (per 5 s interval)
-      const powers = mapPowerData({power: {values: data}} as any);
+      const powers = mapPowerData({ power: { values: data } } as any);
 
       if (!powers.length) return;
 
       // Compute current produced energy at current time
       const currentEnergy = getValueAtCurrentTime(mapPowerForCalculations(powers));
-      if (currentEnergy !== null) this.currentPowerKWh.set(currentEnergy);
+      if (currentEnergy !== null && !isNaN(currentEnergy)) {
+        this.currentPowerKWh.set(currentEnergy);
+      }
 
       // Compute average energy per minute (for graphing)
       this.minuteAverages.set(

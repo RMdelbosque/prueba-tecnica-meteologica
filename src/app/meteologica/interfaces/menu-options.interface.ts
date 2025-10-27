@@ -4,7 +4,7 @@ export interface MenuOption {
 }
 
 export const MENU_OPTIONS: MenuOption[] = [
-  { label: 'Inicio', route: 'home' },
-  { label: 'Temperatura', route: 'temperature' },
-  { label: 'Energía', route: 'power' }
+  { label: 'Home', route: 'home' },
+  { label: 'Temperature', route: 'temperature' },
+  { label: 'Power', route: 'power' }
 ];

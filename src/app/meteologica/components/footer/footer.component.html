@@ -21,7 +21,7 @@
         @for (email of contactEmails; track email.address) {
           <a
             href="mailto:{{ email.address }}"
-            class="block text-gray-300 hover:text-[#00cc76] transition"
+            class="block text-gray-300 hover:text-temperature transition"
           >
             {{ email.address }}
           </a>
@@ -44,7 +44,7 @@
           [href]="linkedinUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="hover:text-[#00cc76] transition font-semibold"
+          class="hover:text-temperature transition font-semibold"
         >
           LinkedIn
         </a>
@@ -60,7 +60,7 @@
             [href]="addressUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="hover:text-[#00cc76] transition"
+            class="hover:text-temperature transition"
           >
             {{ address.street }}
           </a>
@@ -77,7 +77,7 @@
           <a
             [href]="legalUrl"
             target="_blank"
-            class="hover:text-[#00cc76] transition"
+            class="hover:text-temperature transition"
           >
             Legal notice
           </a>
