@@ -1,25 +1,18 @@
-<section class="flex flex-col items-center justify-center min-h-screen mt-15 p-0 space-y-0">
+<section class="flex flex-col items-center justify-center min-h-screen space-y-0">
 
-  <!-- Bloque de Temperatura -->
-  <div
-    class="w-full bg-[url('/assets/bg-pattern.svg')] bg-center bg-cover py-12"
-  >
-    <div
-      class="flex flex-col items-center gap-6 w-250 max-w-full mx-auto bg-white/80 backdrop-blur-sm shadow-lg rounded-2xl p-10"
-    >
-      <temperature />
-    </div>
+<!-- BLOQUE DE TEMPERATURA -->
+<div class="relative w-full overflow-hidden bg-linear-to-b from-emerald-100 via-emerald-50 to-white py-16">
+
+    <temperature />
+</div>
+
+
+<!-- BLOQUE DE ENERGÍA -->
+<div class="relative w-full overflow-hidden bg-linear-to-b from-purple-200 via-purple-50 to-white">
+
+    <power />
   </div>
 
-  <!-- Bloque de Energía -->
-  <div
-    class="w-full bg-purple-50 py-10"
-  >
-    <div
-      class="flex flex-col items-center gap-6 w-250 max-w-full mx-auto bg-white/80 backdrop-blur-sm shadow-lg rounded-2xl p-10"
-    >
-      <power />
-    </div>
-  </div>
+
 
 </section>

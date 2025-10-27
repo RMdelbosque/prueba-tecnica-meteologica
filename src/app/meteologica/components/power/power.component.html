@@ -1,13 +1,26 @@
+  <div class="absolute inset-0 opacity-25 bg-[conic-gradient(from_120deg_at_30%_40%,#7e22ce_0%,transparent_70%)] animate-spin-slow"></div>
+   <!-- <div class="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_30%_40%,#7e22ce_0%,transparent_70%)] animate-pulse"></div> -->
 
-<div class="flex items-center gap-8 p-6">
-  <div class="flex flex-col items-center w-1/4 text-center">
-    <h2 class="text-xl font-semibold mb-2">⚡ Energia actual</h2>
-    <p class="text-3xl font-bold text-power">
+  <!-- Panel principal -->
+ <div
+  class="relative z-10 flex flex-col items-center gap-8 w-[900px] max-w-full mx-auto p-10
+         bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0.7)_60%,rgba(255,255,255,0.4)_100%)]
+         backdrop-blur-lg rounded-lg shadow-xl border border-white/20 mt-30 mb-10"
+  >
+
+<h2 class="text-2xl font-semibold text-black mb-2 justify-center text-center ">Power</h2>
+<div class="flex items-center gap-8">
+
+  <div
+  class="flex flex-col items-center w-1/4 text-center">
+    <h2 class="text-xl font-semibold mb-2">Current</h2>
+    <p class="text-2xl font-bold text-power">
       {{ power.currentPowerKWh()?.toFixed(2) ?? '—' }} kWh
     </p>
   </div>
 
   <div class="w-3/4">
+    <h2 class="text-lg font-semibold text-gray-800 justify-center text-center ">Average power</h2>
     <line-chart
       [data]="power.minuteAverages()"
       color="#7C3AED"
@@ -17,3 +30,4 @@
     />
   </div>
 </div>
+  </div>
