@@ -18,7 +18,7 @@ export class WeatherService {
   private async loadData() {
     try {
       // Download the YAML file as plain text using fetch
-      const res = await fetch('/assets/data.yml');
+      const res = await fetch('./assets/data.yml');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const text = await res.text();
 

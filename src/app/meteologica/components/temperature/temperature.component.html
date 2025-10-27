@@ -1,21 +1,22 @@
 <!-- Main panel -->
 <div
-  class="relative z-10 flex flex-col items-center gap-8 w-[900px] max-w-full mx-auto p-10
-         bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0.7)_60%,rgba(255,255,255,0.4)_100%)] backdrop-blur-lg rounded-lg shadow-xl">
+  class="relative z-10 flex flex-col items-center gap-8 w-full max-w-[900px] mx-auto px-6 py-10
+         bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.6)_60%,rgba(255,255,255,0.3)_100%)]
+         backdrop-blur-md rounded-2xl shadow-lg border border-white/20">
   <h2 class="text-2xl font-semibold text-black mb-3 justify-center text-center ">Temperature</h2>
-  <div class="flex items-center gap-8">
+  <div class="flex flex-col md:flex-row items-center gap-8 w-full">
 
     <!-- Temperature box -->
-    <div class="flex flex-col items-center w-1/4 text-center">
-      <h2 class="text-xl font-semibold text-gray-800 mb-2 justify-center text-center ">Current</h2>
+    <div class="flex flex-col items-center text-center w-full md:w-1/4 mb-6 md:mb-0">
+      <h2 class="text-xl font-semibold mb-2">Current</h2>
       <p class="text-2xl font-bold text-temperature">
         {{ temperature.currentTemperatureC()?.toFixed(2) ?? '—' }} °C
       </p>
     </div>
 
     <!-- Graph -->
-    <div class="w-3/4">
-      <h2 class="text-lg font-semibold text-gray-800 justify-center text-center ">Average temperature</h2>
+    <div class="w-full md:w-3/4">
+      <h2 class="text-lg font-semibold text-gray-800 justify-center text-center mb-3 md:mb-0">Average temperature</h2>
       <line-chart [data]="temperature.minuteAverages()" color="#00cc76" unit="°C" [width]="700" [height]="300" />
     </div>
   </div>
