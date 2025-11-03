@@ -1,4 +1,4 @@
-# Prueba Técnica Meteorológica
+# Meteorologia
 
 Aplicación web desarrollada con **Angular 19**, que muestra de forma visual y artística la **temperatura y la energía generada** a lo largo del día.
 
