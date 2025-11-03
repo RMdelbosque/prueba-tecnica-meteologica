@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "prueba-tecnica-meteologica": {
+    "meteorologia": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/prueba-tecnica-meteologica",
+            "outputPath": "dist/meteorologia",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -62,10 +62,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "prueba-tecnica-meteologica:build:production"
+              "buildTarget": "meteorologia:build:production"
             },
             "development": {
-              "buildTarget": "prueba-tecnica-meteologica:build:development"
+              "buildTarget": "meteorologia:build:development"
             }
           },
           "defaultConfiguration": "development"

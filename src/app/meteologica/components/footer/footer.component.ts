@@ -14,21 +14,16 @@ export class FooterComponent {
 
   // Contact emails
   contactEmails: ContactEmail[] = [
-    { label: 'commercial', address: 'commercial@meteologica.com' },
-    { label: 'usa', address: 'usa@meteologica.com' },
-    { label: 'china', address: 'china@meteologica.com' },
-    { label: 'brasil', address: 'brasil@meteologica.com' },
-    { label: 'india', address: 'india@meteologica.com' },
+    { label: 'personal', address: 'rodrigo.m.delbosque@gmail.com' }
   ];
 
-  phone = '+34 914561001';
-  linkedinUrl = 'https://es.linkedin.com/company/meteologica';
-  addressUrl = 'https://goo.gl/maps/sXSK5hiCV1m';
+  phone = '+34 654859387';
+  linkedinUrl = 'https://www.linkedin.com/in/rodrigo-del-bosque/';
+  addressUrl = 'https://maps.app.goo.gl/j4uNV3CASEUfqKtLA';
   address = {
-    street: 'Calle Costa Brava, 10',
-    city: '28034, Madrid',
+    city: 'Madrid',
     country: 'Spain',
   };
 
-  legalUrl = 'https://www.meteologica.com/legal.html';
+  portfolio = 'https://rmdelbosque.com';
 }

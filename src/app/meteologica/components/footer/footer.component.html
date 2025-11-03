@@ -1,15 +1,6 @@
 <footer class="bg-base-footer text-white py-10 px-6 border-t border-gray-800">
   <!-- Logo + Line -->
-  <div class="grid grid-cols-1 sm:grid-cols-6 items-center gap-4 mx-8 mb-8">
-    <div class="flex justify-center sm:justify-start">
-      <img
-        src="./assets/img/Logo_blanco.png"
-        alt="Meteologica logo invertido"
-        class="h-6 sm:h-5 opacity-90"
-      />
-    </div>
-    <div class="bg-white h-0.5 sm:h-1 sm:col-span-5 w-full"></div>
-  </div>
+ <div class="bg-white h-0.5 sm:h-1 sm:col-span-5 w-full mb-8"></div>
 
   <!-- Content -->
   <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-sm tracking-wide">
@@ -17,7 +8,7 @@
     <div class="flex items-start gap-3">
       <i class="fa-solid fa-envelope text-white text-lg mt-1"></i>
       <div>
-        <b class="block mb-2 text-base text-white">Enquiries</b>
+        <b class="block mb-2 text-base text-white">Mail</b>
         @for (email of contactEmails; track email.address) {
           <a
             href="mailto:{{ email.address }}"
@@ -56,14 +47,6 @@
       <i class="fa-solid fa-location-dot text-white text-lg mt-1"></i>
       <p class="text-gray-300">
         <b class="block text-white">
-          <a
-            [href]="addressUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="hover:text-temperature transition"
-          >
-            {{ address.street }}
-          </a>
         </b>
         {{ address.city }}<br />
         {{ address.country }}
@@ -75,11 +58,11 @@
       <p class="text-gray-300">
         <b class="block text-white">
           <a
-            [href]="legalUrl"
+            [href]="portfolio"
             target="_blank"
             class="hover:text-temperature transition"
           >
-            Legal notice
+            Personal portfolio
           </a>
         </b>
       </p>
@@ -88,6 +71,6 @@
 
   <!-- Copyright -->
   <div class="text-center mt-8 text-sm text-gray-400">
-    © {{ currentYear }} Meteologica S.A.
+    © {{ currentYear }} Rodrigo del Bosque
   </div>
 </footer>

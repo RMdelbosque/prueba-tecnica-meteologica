@@ -6,7 +6,7 @@ import { NavbarMobileMenuComponent } from './navbar-mobile-menu/navbar-mobile-me
 @Component({
   selector: 'navbar',
   standalone: true,
-  imports: [RouterLink, NavbarMenuComponent, NavbarMobileMenuComponent],
+  imports: [NavbarMenuComponent, NavbarMobileMenuComponent],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {

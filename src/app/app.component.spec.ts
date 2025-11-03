@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'prueba-tecnica-meteologica' title`, () => {
+  it(`should have the 'meteorologia' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('prueba-tecnica-meteologica');
+    expect(app.title).toEqual('meteorologia');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, prueba-tecnica-meteologica');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, meteorologia');
   });
 });
